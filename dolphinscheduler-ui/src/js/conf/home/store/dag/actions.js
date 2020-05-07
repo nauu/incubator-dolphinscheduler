@@ -90,6 +90,7 @@ export default {
       })
     })
   },
+
   /**
    * Get process definition DAG diagram details
    */
@@ -127,6 +128,22 @@ export default {
       })
     })
   },
+
+/**
+   * Get process definition DAG diagram details
+   */
+  copyProcess ({ state }, payload) {
+    return new Promise((resolve, reject) => {
+      io.post(`projects/${state.projectName}/process/copy`, {
+        processId: payload.processId
+      }, res => {
+        resolve(res)
+      }).catch(e => {
+        reject(e)
+      })
+    })
+  },
+
   /**
    * Get the process instance DAG diagram details
    */
@@ -579,14 +596,15 @@ export default {
       }
     }
 
-    io.get(`projects/${state.projectName}/process/export`,{processDefinitionId: payload.processDefinitionId,}, res => {
-      downloadBlob(res, payload.processDefinitionName)
-  }, e => {
+    io.get(`projects/${state.projectName}/process/export`,{processDefinitionIds: payload.processDefinitionIds}, res => {
+      downloadBlob(res, payload.fileName)
+    }, e => {
 
     }, {
       responseType: 'blob'
     })
   },
+
   /**
    * Process instance get variable
    */
